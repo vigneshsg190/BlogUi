@@ -1,14 +1,56 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "name": "admin",
-            "password": "admin"
-        },
-        {
-            "id": 2,
-            "name": "Node.js",
-            "password": "Mohit"
-        }
-    ]
+  "users": [
+    {
+      "id": "1",
+      "name": "admin",
+      "password": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Node.js",
+      "password": "Mohit"
+    },
+    {
+      "id": "c35c",
+      "names": "vignesh",
+      "passworda": "123"
+    },
+    {
+      "id": "133d",
+      "names": "vignesh",
+      "passworda": "123"
+    },
+    {
+      "id": "741b",
+      "names": "test",
+      "passworda": "2345"
+    },
+    {
+      "id": "198a",
+      "names": "ytfyuf",
+      "passworda": "45"
+    },
+    {
+      "id": "59db",
+      "names": "admin",
+      "passworda": "admin"
+    }
+  ],
+  "posts": [
+    {
+      "id": "6523",
+      "title": "sasa",
+      "content": "sadd"
+    },
+    {
+      "id": "5780",
+      "title": "aaa",
+      "content": "xxxx"
+    },
+    {
+      "id": 7990,
+      "title": "test",
+      "content": "dewfe"
+    }
+  ]
 }
