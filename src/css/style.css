@@ -11,3 +11,8 @@
 .form-container label{
     display: block !important;
 }
+
+.dltbtn{
+
+    margin-left: 7px;
+}
