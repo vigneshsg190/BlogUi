@@ -3,6 +3,8 @@ import axios from 'axios';
 import image from '../pexels-photo-965117.webp';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import blogService from '../service/Post-Service';
+import viewblogPage from './ViewBlogPage';
 
 const Blog = () => {
     const [title, setTitle] = useState('');
@@ -20,7 +22,8 @@ const Blog = () => {
 
 
     const getblog = () => {
-        axios.get('http://localhost:8000/posts')
+        blogService.getAllBlogs()
+        // axios.get('http://localhost:8000/posts')
             .then((res) => {
                 // const updated = res.data;
                 // console.log(updated);
@@ -48,13 +51,14 @@ const Blog = () => {
     }
 
     const handleblogformsubmitt = (e) => {
+        console.log(e)
         e.preventDefault();
         const newblog = {
-            id: Math.floor(Math.random() * 10000),
             title: title,
             content: blog,
         }
-        axios.post('http://localhost:8000/posts', newblog)
+        blogService.createBlog(newblog)
+        // axios.post('http://localhost:8000/posts', newblog)
             .then((res) => {
                 setBlogdata([...blogdata, res.data])
             })
@@ -85,18 +89,17 @@ const Blog = () => {
     }
 
     // Deleting Blog
-    const DeleteBlog = async (value) => {
-        try {
-            const blogid = Number(value.id); // ensure it's a number
-            console.log("Deleting blog with ID:", blogid);
-
-            await axios.delete(`http://localhost:8000/posts/${blogid}`);
-            toast.success('Blog Deleted Successfully!');
-            getblog(); // refresh blog list
-        } catch (error) {
-            toast.error("Error deleting blog");
-        }
+   const DeleteBlog = async (value) => {
+    try {
+        const blogid = value.id;
+        await blogService.deleteBlog(blogid); //  wait for deletion to complete
+        getblog(); //  fetch updated list AFTER deletion
+        toast.success('Blog Deleted Successfully!');
+    } catch (error) {
+        toast.error("Error deleting blog");
     }
+};
+
 
     //Edit Blog data in popup
     const EditBlogDataPopupfunc = (e) => {
@@ -109,11 +112,16 @@ const Blog = () => {
     const editedBlogDataSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { id, title, content } = EditBlogData;
-            await axios.put(`http://localhost:8000/posts/${id}`, {
-                title,
-                content
-            });
+            const updatedata ={
+            id : EditBlogData.id, //setting id value from the popup form during the edit
+             title : EditBlogData.title,
+             content : EditBlogData.content,
+            }
+            await blogService.updateBlog(EditBlogData.id,updatedata);
+            // await axios.put(`http://localhost:8000/posts/${id}`, {
+            //     title,
+            //     content
+            // });
             alert("Blog updated successfully!");
             getblog(); // Refresh the list
             EditBlogPopupClose(); // Close the modal
@@ -128,6 +136,15 @@ const Blog = () => {
             [id]: !prevs[id], // toggle only that specific card
         }));
     };
+
+    const navigate = useNavigate()
+    const ViewBlog = async (item) => {
+        const response = await blogService.ViewBlog(item.id);
+        // const blogfulldata = response.data;
+        // console.log(ff.data);
+        navigate('/view-blog', {state:item})
+        
+    }
 
     return (
         <>
@@ -181,7 +198,13 @@ const Blog = () => {
                                         </p>
                                         <button
                                             type="button"
-                                            className="btn btn-primary"
+                                            className="btn btn-primary "
+                                            onClick={() => ViewBlog(items)} >
+                                            View 
+                                        </button> |
+                                        <button
+                                            type="button"
+                                            className="btn btn-primary dltbtn"
                                             onClick={() => popupedit(items)} >
                                             Edit
                                         </button> |
@@ -234,3 +257,4 @@ const Blog = () => {
 }
 
 export default Blog;
+
